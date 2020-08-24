@@ -1,0 +1,117 @@
+body {
+  font-family: arial, helvetica, sans-serif;
+  font-size: 13px;
+  font-size-adjust: none;
+  font-stretch: normal;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1.4;
+}
+
+body,
+ul,
+ol,
+dl,
+dd,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+form,
+fieldset,
+legend,
+input,
+textarea,
+select,
+button,
+th,
+td {
+  margin: 0;
+  padding: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: 100%;
+  font-weight: normal;
+}
+
+table {
+  font-size: inherit;
+}
+
+input,
+select {
+  font-family: arial, helvetica, clean, sans-serif;
+  font-size: 100%;
+  font-size-adjust: none;
+  font-stretch: normal;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: normal;
+}
+
+button {
+  overflow: visible;
+}
+
+li {
+  list-style-image: none;
+  list-style-position: outside;
+  list-style-type: none;
+}
+
+img {
+  text-decoration: none;
+}
+
+/*滚动条整体部分，可以设置宽度啥的*/
+
+::-webkit-scrollbar {
+  width: 4px;
+  height: 6px;
+}
+
+/*滚动条两端的按钮*/
+
+::-webkit-scrollbar-button {
+  width: 0px;
+  height: 0px;
+}
+
+/*外层轨道*/
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.5);
+  border: solid 1px #121212;
+  box-shadow: 0px 0px 3px #121212 inset;
+  border-radius: 8px;
+}
+
+/*内层滚动槽*/
+
+::-webkit-scrollbar-track-piece {
+  background-color: #fff;
+}
+
+/*滚动的滑块*/
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+}
+
+/*滚动的滑块,鼠标放上时*/
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.5);
+}
