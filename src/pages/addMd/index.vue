@@ -36,6 +36,7 @@
 </template>
 <script>
 import { mdTypes } from "../../config/mdTypes";
+import { storage } from "../../utils/index";
 import Vditor from "vditor";
 import "vditor/src/assets/scss/index.scss";
 export default {
@@ -45,8 +46,9 @@ export default {
       form: {
         title: "",
         type: "",
-        top: false,
+        top: 0,
         content: "",
+        userId: "",
       },
       submitFlag: true,
       mdTypes,
@@ -66,6 +68,9 @@ export default {
       },
     };
   },
+  created() {
+    this.form.userId = storage.get("userId");
+  },
   mounted() {
     this.contentEditor = new Vditor("vditor", {
       height: 360,
@@ -83,8 +88,8 @@ export default {
   methods: {
     submit() {
       if (!this.submitFlag) {
-        this.content = this.contentEditor.getValue();
-        console.log(this.content);
+        this.form.content = this.contentEditor.getValue();
+        this.$http.post("/api/sendMd", this.form);
       }
     },
   },

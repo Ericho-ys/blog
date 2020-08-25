@@ -71,7 +71,7 @@ export default {
       this.form.userName = userName;
     }
     if (password) {
-      this.form.password = jsbase64.Base64.decode(password);
+      this.form.password = jsbase64.decode(password);
       console.log(this.form.password);
     }
   },
@@ -85,10 +85,11 @@ export default {
           password: this.form.password,
         };
         const result = await this.$http.post("/api/login", params);
-        storage.set("Token", result.token);
+        storage.set("userId", result.userId);
+        storage.set("token", result.token);
         storage.set("username", this.form.userName);
         if (this.checked) {
-          storage.set("password", jsbase64.Base64.encode(this.form.password));
+          storage.set("password", jsbase64.encode(this.form.password));
         } else {
           storage.remove("password");
         }

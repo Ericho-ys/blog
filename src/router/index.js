@@ -9,7 +9,9 @@ const index = (r) =>
 const mds = (r) =>
     require.ensure([], () => r(require("../pages/mds/index.vue")), "mds"); // 文章列表
 const addMd = (r) =>
-    require.ensure([], () => r(require("../pages/addMd/index.vue")), "addMd"); // 文章列表
+    require.ensure([], () => r(require("../pages/addMd/index.vue")), "addMd"); // 新增文章
+const mdDetail = (r) =>
+    require.ensure([], () => r(require("../pages/mdDetail/index.vue")), "mdDetail"); // 文章详情
 const router = new VueRouter({
     mode: "history",
     routes: [{
@@ -33,6 +35,10 @@ const router = new VueRouter({
                 path: "/addMd",
                 name: "addMd",
                 component: addMd,
+            }, {
+                path: "/mdDetail",
+                name: "mdDetail",
+                component: mdDetail,
             }],
         },
     ],

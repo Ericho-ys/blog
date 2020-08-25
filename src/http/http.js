@@ -1,41 +1,43 @@
 /* eslint-disable no-empty */
 import axios from "axios";
-import { storage } from "../utils/index";
+import {
+    storage
+} from "../utils/index";
 import router from "../router/index";
 
 const service = axios.create({
-  baseURL: "http://127.0.0.1:3000",
-  method: "POST",
-  dataType: "json",
-  timeout: 10000, // request timeout
-  responseType: "json",
+    baseURL: "http://127.0.0.1:3000",
+    method: "POST",
+    dataType: "json",
+    timeout: 10000, // request timeout
+    responseType: "json",
 });
 service.interceptors.request.use((config) => {
-  const url = config.url;
-  if (url) {
-    if (url.indexOf("login") == -1) {
-      const token = storage.get("token");
-      if (token) {
-        config.headers["token"] = token;
-      } else {
-        router.push("/login");
-      }
+    const url = config.url;
+    if (url) {
+        if (url.indexOf("login") == -1) {
+            const token = storage.get("token");
+            if (token) {
+                config.headers["token"] = token;
+            } else {
+                router.push("/login");
+            }
+        }
     }
-  }
-  return config;
+    return config;
 });
 
 service.interceptors.response.use((response) => {
-  const res = response.data;
-  if (res.resCode == 1) {
-    return res;
-  } else {
-    if (res.msgCode == 10005) {
-      storage.remove("token");
-      router.push("/login");
+    const res = response.data;
+    if (res.resCode == 1) {
+        return res;
     } else {
-      return res.errMsg;
+        if (res.msgCode == 10005) {
+            storage.remove("token");
+            router.push("/login");
+        } else {
+            return res.errMsg;
+        }
     }
-  }
 });
 export default service;
