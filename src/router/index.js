@@ -12,11 +12,13 @@ const addMd = (r) =>
     require.ensure([], () => r(require("../pages/addMd/index.vue")), "addMd"); // 新增文章
 const mdDetail = (r) =>
     require.ensure([], () => r(require("../pages/mdDetail/index.vue")), "mdDetail"); // 文章详情
+const home = (r) =>
+    require.ensure([], () => r(require("../pages/home/index.vue")), "home"); // 首页
 const router = new VueRouter({
     mode: "history",
     routes: [{
             path: "/",
-            redirect: "/index",
+            redirect: "/indexHome",
         },
         {
             path: "/login",
@@ -28,6 +30,10 @@ const router = new VueRouter({
             name: "index",
             component: index,
             children: [{
+                path: '/indexHome',
+                name: "indexHome",
+                component: home
+            }, {
                 path: "/mds",
                 name: "mds",
                 component: mds,

@@ -76,7 +76,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 #mds {
-  background-color: white;
   .head {
     display: flex;
     position: sticky;
@@ -104,11 +103,6 @@ export default {
   }
   .mdList {
     margin: 0 40px;
-    max-height: calc(100vh - 300px);
-    overflow: scroll;
-    padding: 5px 10px;
-    background-color: rgba(211, 211, 211, 0.2);
-    border-radius: 10px;
     .mdItem {
       height: 50px;
       line-height: 50px;

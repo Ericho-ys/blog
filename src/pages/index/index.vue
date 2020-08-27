@@ -21,7 +21,8 @@ export default {
 </script>
 <style lang="scss">
 .content {
-  min-height: calc(100vh - 50px);
+  height: calc(100vh - 50px);
+  background-color: white;
 }
 .container {
   flex: 1;
