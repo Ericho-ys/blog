@@ -14,6 +14,8 @@ const mdDetail = (r) =>
     require.ensure([], () => r(require("../pages/mdDetail/index.vue")), "mdDetail"); // 文章详情
 const home = (r) =>
     require.ensure([], () => r(require("../pages/home/index.vue")), "home"); // 首页
+const users = (r) =>
+    require.ensure([], () => r(require("../pages/users/index.vue")), "users"); // 首页
 const router = new VueRouter({
     mode: "history",
     routes: [{
@@ -45,6 +47,10 @@ const router = new VueRouter({
                 path: "/mdDetail",
                 name: "mdDetail",
                 component: mdDetail,
+            }, {
+                path: "/users",
+                name: "users",
+                component: users
             }],
         },
     ],

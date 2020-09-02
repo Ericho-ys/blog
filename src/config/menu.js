@@ -9,5 +9,11 @@ const slides = [{
         router: "mds",
         childResource: [],
     },
+    {
+        id: "3",
+        name: "用户管理",
+        router: "users",
+        childResource: []
+    }
 ];
 export default slides;
