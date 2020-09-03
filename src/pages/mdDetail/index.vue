@@ -17,7 +17,7 @@ export default {
     };
   },
   created() {
-    this.userId = storage.get("userId");
+    this.userId = JSON.parse(storage.get("userId"))._id;
   },
   async mounted() {
     await this.getDetail();

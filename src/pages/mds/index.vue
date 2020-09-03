@@ -55,7 +55,7 @@ export default {
       this.$router.push({ name: "addMd" });
     },
     async getMdList() {
-      const userId = storage.get("userId");
+      const userId = JSON.parse(storage.get("user"))._id;
       const res = await this.$http.post("/api/getMdList", {
         userId: userId,
         pageSize: 10,

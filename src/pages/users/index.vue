@@ -57,12 +57,17 @@ export default {
     };
   },
   created() {
-    this.userId = storage.get("userId");
+    this.userId = JSON.parse(storage.get("user"))._id;
     this.getUsers();
   },
   methods: {
     handleEdit(index, row) {
-      console.log(index, row);
+      this.$router.push({
+        path: "userDetail",
+        query: {
+          id: row._id,
+        },
+      });
     },
     handleDelete(index, row) {
       console.log(index, row);

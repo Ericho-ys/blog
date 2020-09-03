@@ -69,7 +69,7 @@ export default {
     };
   },
   created() {
-    this.form.userId = storage.get("userId");
+    this.form.userId = JSON.parse(storage.get("userId"))._id;
   },
   mounted() {
     this.contentEditor = new Vditor("vditor", {

@@ -61,9 +61,7 @@ export default {
       checked: true,
     };
   },
-  created() {
-    console.log(jsbase64);
-  },
+  created() {},
   mounted() {
     const userName = storage.get("username");
     const password = storage.get("password");
@@ -72,7 +70,6 @@ export default {
     }
     if (password) {
       this.form.password = jsbase64.decode(password);
-      console.log(this.form.password);
     }
   },
   methods: {
@@ -85,7 +82,7 @@ export default {
           password: this.form.password,
         };
         const result = await this.$http.post("/api/login", params);
-        storage.set("userId", result.userId);
+        storage.set("user", JSON.stringify(result.user));
         storage.set("token", result.token);
         storage.set("username", this.form.userName);
         if (this.checked) {
@@ -93,7 +90,7 @@ export default {
         } else {
           storage.remove("password");
         }
-        this.$router.push({ name: "index" });
+        this.$router.push({ path: "/" });
       });
     },
   },
