@@ -1,6 +1,6 @@
 <template>
   <div id="head">
-    <div class="sysytemName">管理系统</div>
+    <div class="sysytemName">RESOURCE</div>
     <div class="headOptions"></div>
   </div>
 </template>

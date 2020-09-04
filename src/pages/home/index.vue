@@ -26,12 +26,17 @@ export default {
   },
   created() {
     this.getStatistics();
+    this.getMdCounts();
   },
   methods: {
     async getStatistics() {
       const result = await this.$http.post("/api/getCount");
       this.count = result.result;
       console.log(this.count);
+    },
+    async getMdCounts() {
+      const result = await this.$http.post("/api/getMdCount");
+      console.log(result);
     },
   },
 };
