@@ -1,7 +1,8 @@
 <template>
   <div id="mdDetail">
     <h1 class="title">{{ detail.title }}</h1>
-    <div id="vditorshow" v-show="ready"></div>
+    <div id="vditorshow"
+         v-show="ready"></div>
   </div>
 </template>
 <script>
@@ -10,16 +11,16 @@ import Vditor from "vditor";
 import "vditor/src/assets/scss/index.scss";
 export default {
   name: "mdDetail",
-  data() {
+  data () {
     return {
       detail: "",
       ready: false,
     };
   },
-  created() {
-    this.userId = JSON.parse(storage.get("userId"))._id;
+  created () {
+    this.userId = JSON.parse(storage.get("user"))._id;
   },
-  async mounted() {
+  async mounted () {
     await this.getDetail();
     this.contentEditor = new Vditor("vditorshow", {
       toolbarConfig: {
@@ -36,7 +37,7 @@ export default {
     this.contentEditor.disabled();
   },
   methods: {
-    async getDetail() {
+    async getDetail () {
       const result = await this.$http.post("/api/getMdDetaiById", {
         userId: this.userId,
         mdId: this.$route.query.id,

@@ -1,6 +1,8 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-
+import {
+    storage
+} from "../utils/index"
 Vue.use(VueRouter);
 const login = (r) =>
     require.ensure([], () => r(require("../pages/login/index")), "login"); // 登录
@@ -76,5 +78,15 @@ const router = new VueRouter({
         },
     ],
 });
-
+router.beforeEach((to, from, next) => {
+    if (to.path === '/login') {
+        next()
+    } else {
+        if (storage.get('user')) {
+            next()
+        } else {
+            next('/login')
+        }
+    }
+})
 export default router;

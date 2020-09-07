@@ -1,24 +1,23 @@
 <template>
   <div id="addMd">
     <div class="forms">
-      <el-form
-        ref="form"
-        :inline="true"
-        :model="form"
-        :rules="rules"
-        label-width="80px"
-      >
-        <el-form-item label="文章标题" prop="title">
+      <el-form ref="form"
+               :inline="true"
+               :model="form"
+               :rules="rules"
+               label-width="80px">
+        <el-form-item label="文章标题"
+                      prop="title">
           <el-input v-model="form.title"></el-input>
         </el-form-item>
-        <el-form-item label="文章类型" prop="type">
-          <el-select v-model="form.type" placeholder="请选择文章类型">
-            <el-option
-              v-for="item in mdTypes"
-              :key="item.value"
-              :label="item.value"
-              :value="item.type"
-            ></el-option>
+        <el-form-item label="文章类型"
+                      prop="type">
+          <el-select v-model="form.type"
+                     placeholder="请选择文章类型">
+            <el-option v-for="item in mdTypes"
+                       :key="item.value"
+                       :label="item.value"
+                       :value="item.type"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="置顶">
@@ -26,9 +25,10 @@
         </el-form-item>
       </el-form>
       <div>
-        <el-button type="primary" round @click="submit" :disabled="submitFlag"
-          >保存</el-button
-        >
+        <el-button type="primary"
+                   round
+                   @click="submit"
+                   :disabled="submitFlag">保存</el-button>
       </div>
     </div>
     <div id="vditor"></div>
@@ -41,14 +41,14 @@ import Vditor from "vditor";
 import "vditor/src/assets/scss/index.scss";
 export default {
   name: "addMd",
-  data() {
+  data () {
     return {
       form: {
         title: "",
         type: "",
         top: 0,
         content: "",
-        userId: "",
+        setTopTime: ""
       },
       submitFlag: true,
       mdTypes,
@@ -68,10 +68,10 @@ export default {
       },
     };
   },
-  created() {
-    this.form.userId = JSON.parse(storage.get("userId"))._id;
+  created () {
+    this.userId = JSON.parse(storage.get("user"))._id;
   },
-  mounted() {
+  mounted () {
     this.contentEditor = new Vditor("vditor", {
       height: 360,
       toolbarConfig: {
@@ -86,10 +86,17 @@ export default {
     });
   },
   methods: {
-    submit() {
+    submit () {
       if (!this.submitFlag) {
         this.form.content = this.contentEditor.getValue();
-        this.$http.post("/api/sendMd", this.form);
+        if (this.form.top) {
+          this.form.setTopTime = new Date().getTime()
+        } else {
+          this.form.setTopTime = 0
+        }
+        this.$http.post("/api/sendMd", {
+          ...this.form, userId: this.userId,
+        });
       }
     },
   },

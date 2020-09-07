@@ -2,32 +2,28 @@
   <div id="mds">
     <div class="head">
       <ul class="mdTypes">
-        <li
-          v-for="item in mdTypes"
-          :key="item.value"
-          @click="activeType(item)"
-          class="typeItem"
-        >
+        <li v-for="item in mdTypes"
+            :key="item.value"
+            @click="activeType(item)"
+            class="typeItem">
           <el-button>{{ item.value }}</el-button>
         </li>
       </ul>
-      <el-button
-        class="addBtn"
-        icon="el-icon-plus"
-        circle
-        type="primary"
-        @click="addMd"
-      ></el-button>
+      <el-button class="addBtn"
+                 icon="el-icon-plus"
+                 circle
+                 type="primary"
+                 @click="addMd"></el-button>
     </div>
-    <ul class="mdList" v-show="mdList.length">
-      <li
-        v-for="item in mdList"
-        :key="item._id"
-        class="mdItem"
-        @click="toDetail(item._id)"
-      >
+    <ul class="mdList"
+        v-show="mdList.length">
+      <li v-for="item in mdList"
+          :key="item._id"
+          class="mdItem"
+          @click="toDetail(item._id)">
         <span v-if="item.top">【顶】</span>
-        <span class="mdTitle" v-text="item.title"></span>
+        <span class="mdTitle"
+              v-text="item.title"></span>
       </li>
     </ul>
   </div>
@@ -38,23 +34,23 @@ import { mdTypes } from "../../config/mdTypes";
 import { storage } from "../../utils/index";
 export default {
   name: "mds",
-  data() {
+  data () {
     return {
       mdTypes: mdTypes,
       mdList: [],
     };
   },
-  created() {
+  created () {
     this.getMdList();
   },
   methods: {
-    activeType(item) {
+    activeType (item) {
       console.log(item);
     },
-    addMd() {
+    addMd () {
       this.$router.push({ name: "addMd" });
     },
-    async getMdList() {
+    async getMdList () {
       const userId = JSON.parse(storage.get("user"))._id;
       const res = await this.$http.post("/api/getMdList", {
         userId: userId,
@@ -63,7 +59,7 @@ export default {
       });
       this.mdList = res.result;
     },
-    toDetail(id) {
+    toDetail (id) {
       this.$router.push({
         path: "/mdDetail",
         query: {
