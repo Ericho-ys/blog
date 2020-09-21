@@ -21,9 +21,15 @@
           :key="item._id"
           class="mdItem"
           @click="toDetail(item._id)">
-        <span v-if="item.top">【顶】</span>
-        <span class="mdTitle"
-              v-text="item.title"></span>
+        <div>
+          <span v-if="item.top">【顶】</span>
+          <span class="mdTitle"
+                v-text="item.title"></span>
+        </div>
+        <div>
+          <span>{{`${item.createrName} / `}}</span>
+          <span>{{returnTime(item.creatertime)}}</span>
+        </div>
       </li>
     </ul>
   </div>
@@ -45,18 +51,25 @@ export default {
   },
   methods: {
     activeType (item) {
-      console.log(item);
+      this.getMdList(item.type)
     },
     addMd () {
       this.$router.push({ name: "addMd" });
     },
-    async getMdList () {
+    returnTime (time) {
+      return this.$moment(time).format('YYYY-MM-DD')
+    },
+    async getMdList (type) {
       const userId = JSON.parse(storage.get("user"))._id;
-      const res = await this.$http.post("/api/getMdList", {
+      let params = {
         userId: userId,
         pageSize: 10,
         pageNum: 1,
-      });
+      }
+      if (type !== undefined) {
+        params.type = type
+      }
+      const res = await this.$http.post("/api/getMdList", params);
       this.mdList = res.result;
     },
     toDetail (id) {
@@ -105,9 +118,11 @@ export default {
       box-shadow: 0px 0px 5px #ccc;
       border-radius: 10px;
       font-size: 20px;
-      padding-left: 20px;
+      padding: 0 20px;
       margin-bottom: 10px;
       background-color: white;
+      display: flex;
+      justify-content: space-between;
     }
   }
 }

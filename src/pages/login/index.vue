@@ -2,44 +2,36 @@
   <div id="login">
     <div class="bodymana">
       <el-card class="box-card login-box">
-        <el-form ref="formRef" class="wid" :model="form">
-          <el-form-item
-            prop="userName"
-            :rules="{
+        <el-form ref="formRef"
+                 class="wid"
+                 :model="form">
+          <el-form-item prop="userName"
+                        :rules="{
               required: true,
               message: '请输入用户名',
               trigger: 'blur',
-            }"
-          >
-            <el-input
-              v-model="form.userName"
-              prefix-icon="el-icon-user"
-              placeholder="请输入用户名"
-            ></el-input>
+            }">
+            <el-input v-model="form.userName"
+                      prefix-icon="el-icon-user"
+                      placeholder="请输入用户名"></el-input>
           </el-form-item>
-          <el-form-item
-            prop="password"
-            :rules="{ required: true, message: '请输入密码', trigger: 'blur' }"
-          >
-            <el-input
-              v-model="form.password"
-              type="password"
-              prefix-icon="el-icon-lock"
-              placeholder="请输入密码"
-              @keyup.enter.native="toLoginFn"
-            ></el-input>
+          <el-form-item prop="password"
+                        :rules="{ required: true, message: '请输入密码', trigger: 'blur' }">
+            <el-input v-model="form.password"
+                      type="password"
+                      prefix-icon="el-icon-lock"
+                      placeholder="请输入密码"
+                      @keyup.enter.native="toLoginFn"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button class="btnlogin" type="primary" @click="toLoginFn"
-              >登 录</el-button
-            >
+            <el-button class="btnlogin"
+                       type="primary"
+                       @click="toLoginFn">登 录</el-button>
           </el-form-item>
 
           <div class="justfly">
             <div class="flexcenter">
-              <el-checkbox v-model="checked"
-                ><span class="checkboxlogin">记住登录状态</span></el-checkbox
-              >
+              <el-checkbox v-model="checked"><span class="checkboxlogin">记住登录状态</span></el-checkbox>
             </div>
           </div>
         </el-form>
@@ -52,7 +44,7 @@ import { storage } from "../../utils";
 const jsbase64 = require("js-base64").Base64;
 export default {
   name: "login",
-  data() {
+  data () {
     return {
       form: {
         userName: null,
@@ -61,8 +53,8 @@ export default {
       checked: true,
     };
   },
-  created() {},
-  mounted() {
+  created () { },
+  mounted () {
     const userName = storage.get("username");
     const password = storage.get("password");
     if (userName) {
@@ -73,7 +65,7 @@ export default {
     }
   },
   methods: {
-    toLoginFn() {
+    toLoginFn () {
       const form = this.$refs.formRef;
       form.validate(async (valid) => {
         if (!valid) return;
@@ -99,6 +91,7 @@ export default {
 <style lang="scss">
 #login {
   background-image: url("../../assets/bg.png");
+  background-size: cover;
   height: 100vh;
   .login-box {
     width: 440px;

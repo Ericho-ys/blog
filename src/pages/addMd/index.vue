@@ -88,15 +88,22 @@ export default {
   methods: {
     submit () {
       if (!this.submitFlag) {
-        this.form.content = this.contentEditor.getValue();
-        if (this.form.top) {
-          this.form.setTopTime = new Date().getTime()
-        } else {
-          this.form.setTopTime = 0
-        }
-        this.$http.post("/api/sendMd", {
-          ...this.form, userId: this.userId,
+        this.$refs.form.validate((valid) => {
+          if (valid) {
+            this.form.content = this.contentEditor.getValue();
+            if (this.form.top) {
+              this.form.setTopTime = new Date().getTime()
+            } else {
+              this.form.setTopTime = 0
+            }
+            this.$http.post("/api/sendMd", {
+              ...this.form, createrId: this.userId,
+            });
+          } else {
+            return false;
+          }
         });
+
       }
     },
   },

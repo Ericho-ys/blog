@@ -39,7 +39,6 @@ export default {
   methods: {
     async getDetail () {
       const result = await this.$http.post("/api/getMdDetaiById", {
-        userId: this.userId,
         mdId: this.$route.query.id,
       });
       this.detail = result.result[0];
