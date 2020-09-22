@@ -1,7 +1,10 @@
 import {
+    admin
+} from './auth'
+import {
     storage
 } from "../utils/index"
-const sildeRoute = JSON.parse(storage.get('user')).slideRoute
+const type = JSON.parse(storage.get('user')).type
 const staticSlides = [{
     id: "1",
     name: "首页",
@@ -20,10 +23,17 @@ let asyncRoute = [{
         childResource: []
     }
 ]
-for (let i = 0; i < sildeRoute.length; i++) {
-    const result = asyncRoute.find(item => {
-        return item.router == sildeRoute[i]
-    })
-    staticSlides.push(result)
-}
-export default staticSlides;
+const item = admin.find(item => {
+    return item.type == type
+})
+let authIds = []
+item.routers.forEach(item => {
+    authIds.push(...Object.keys(item))
+})
+console.log(authIds)
+asyncRoute.forEach(item => {
+    if (authIds.indexOf(item.id) !== -1) {
+        staticSlides.push(item)
+    }
+})
+export default staticSlides
