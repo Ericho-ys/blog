@@ -67,7 +67,6 @@ export default {
         oldPassword: "",
         password: "",
         type: 0,
-        routes: []
       },
       defaultImage,
       auth,
@@ -151,7 +150,6 @@ export default {
       const result = await this.$http.post("/api/getUserDetailById", {
         userId: id,
       });
-      this.form.routes = result.result.ids;
       this.form.type = result.result.type
     },
     async save () {
@@ -160,7 +158,6 @@ export default {
       params.headImage = this.form.headImage
       params.username = this.form.username
       params.password = this.form.password
-      params.routes = this.form.routes
       params.type = this.form.type
       if (this.createFlag) {
         api = "/api/createUser"

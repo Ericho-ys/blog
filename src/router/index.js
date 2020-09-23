@@ -56,12 +56,12 @@ const router = new VueRouter({
                 },
                 {
                     path: "/addMd",
-                    name: "addMd",
+                    name: "mds",
                     component: addMd,
                 },
                 {
                     path: "/mdDetail",
-                    name: "mdDetail",
+                    name: "mds",
                     component: mdDetail,
                 },
                 {
@@ -71,7 +71,7 @@ const router = new VueRouter({
                 },
                 {
                     path: "/userDetail",
-                    name: "userDetail",
+                    name: "users",
                     component: userDetail,
                 },
             ],

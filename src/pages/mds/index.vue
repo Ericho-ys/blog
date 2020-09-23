@@ -54,7 +54,7 @@ export default {
       this.getMdList(item.type)
     },
     addMd () {
-      this.$router.push({ name: "addMd" });
+      this.$router.push({ path: "/addMd" });
     },
     returnTime (time) {
       return this.$moment(time).format('YYYY-MM-DD')
