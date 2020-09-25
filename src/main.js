@@ -8,7 +8,7 @@ import "element-ui/lib/theme-chalk/index.css";
 import "./assets/base.css";
 Vue.use(ElementUI);
 Vue.config.productionTip = false;
-Vue.prototype.$http = http;
+Vue.prototype.$http = http(Vue);
 Vue.prototype.$moment = moment;
 new Vue({
   render: (h) => h(App),
