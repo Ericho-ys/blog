@@ -17,6 +17,7 @@
       </el-form-item>
       <el-form-item label="头像">
         <img style="width:50px;height:50px;"
+             @click="changeHeadImage"
              :src="form.headImage ? form.headImage : defaultImage"
              alt="" />
       </el-form-item>
@@ -131,6 +132,10 @@ export default {
     }
   },
   methods: {
+    async changeHeadImage () {
+      if (!this.uploadToken) this.uploadToken = await this.$http.post('api/getUploadToken', {})
+
+    },
     generateKeys (obj, keyArr, expandedKeys) {
       if (typeof obj !== 'object') return
       for (let i in obj) {
