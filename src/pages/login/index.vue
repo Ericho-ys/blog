@@ -73,16 +73,23 @@ export default {
           username: this.form.userName,
           password: this.form.password,
         };
-        const result = await this.$http.post("/api/login", params);
-        storage.set("user", JSON.stringify(result.user));
-        storage.set("token", result.token);
-        storage.set("username", this.form.userName);
-        if (this.checked) {
-          storage.set("password", jsbase64.encode(this.form.password));
-        } else {
-          storage.remove("password");
+        try {
+          const result = await this.$http.post("/api/login", params);
+          console.log(result)
+          storage.set("user", JSON.stringify(result.user));
+          storage.set("token", result.token);
+          storage.set("username", this.form.userName);
+          if (this.checked) {
+            storage.set("password", jsbase64.encode(this.form.password));
+          } else {
+            storage.remove("password");
+          }
+          this.$router.push({ path: "/" });
+        } catch (error) {
+          console.log(error)
         }
-        this.$router.push({ path: "/" });
+
+
       });
     },
   },

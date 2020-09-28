@@ -17,9 +17,17 @@
       </el-form-item>
       <el-form-item label="头像">
         <img style="width:50px;height:50px;"
+             ref="headImage"
              @click="changeHeadImage"
              :src="form.headImage ? form.headImage : defaultImage"
              alt="" />
+        <input type="file"
+               id="select2"
+               ref="imageInputFile"
+               multiple
+               accept="image/*"
+               @change="chooseImage"
+               style="display:none" />
       </el-form-item>
       <el-form-item label="用户名"
                     prop="username">
@@ -57,6 +65,7 @@
 const defaultImage = require("../../../assets/personHead.png");
 import { auth, admin } from "../../../config/auth.js";
 import { storage } from "../../../utils/index";
+import * as qiniu from 'qiniu-js'
 export default {
   name: "userDetail",
   data () {
@@ -124,17 +133,47 @@ export default {
   async created () {
     this.form.type = 2
     const id = this.$route.query.id;
+    // 判断是编辑还是新建
     this.createFlag = id ? false : true
     if (!this.createFlag) {
       this.userId = JSON.parse(storage.get("user"))._id;
+      // 判断否是自己
       this.changeable = this.userId == id ? true : false
       this.getUserDetail(id)
     }
   },
   methods: {
     async changeHeadImage () {
-      if (!this.uploadToken) this.uploadToken = await this.$http.post('api/getUploadToken', {})
-
+      if (!this.createFlag && !this.changeable) return
+      if (!this.uploadToken) {
+        const result = await this.$http.post('api/getUploadToken', {})
+        this.uploadToken = result.result.uploadToken
+        this.domain = result.result.Domain
+      }
+      console.log(this.uploadToken)
+      this.$refs.imageInputFile.click()
+    },
+    chooseImage (e) {
+      const file = e.target.files[0]
+      const key = file.name
+      var config = {
+        useCdnDomain: true,
+        disableStatisticsReport: false,
+        retryCount: 6,
+        region: qiniu.region.z2
+      };
+      var putExtra = {
+        customVars: {}
+      };
+      const _this = this
+      const observable = qiniu.upload(file, key, this.uploadToken, putExtra, config);
+      observable.subscribe({
+        next () { },
+        error () { },
+        async complete (res) {
+          _this.form.headImage = `http://${_this.domain}/${key}`
+        }
+      })
     },
     generateKeys (obj, keyArr, expandedKeys) {
       if (typeof obj !== 'object') return
@@ -156,18 +195,26 @@ export default {
         userId: id,
       });
       this.form.type = result.result.type
+      this.form.headImage = result.result.headImage
+      this.form.username = result.result.username
     },
     async save () {
       let api = "/api/updateAuth"
       let params = {}
-      params.headImage = this.form.headImage
-      params.username = this.form.username
-      params.password = this.form.password
+      // 新建和编辑自己信息 需要传递的参数
+      if (this.changeable || this.createFlag) {
+        params.username = this.form.username
+        params.password = this.form.password
+        params.headImage = this.form.headImage
+      }
+      //编辑自己传递的参数
+      if (this.changeable) {
+        params.oldPassword = this.form.oldPassword
+      }
       params.type = this.form.type
       if (this.createFlag) {
         api = "/api/createUser"
       } else {
-        params.oldPassword = this.form.oldPassword
         params.userId = this.userId
       }
       try {

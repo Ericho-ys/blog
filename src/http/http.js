@@ -39,7 +39,7 @@ export default function http(Vue) {
                 router.push("/login");
             } else {
                 Vue.prototype.$message.error(res.errorMsg);
-                return res.errorMsg;
+                throw new Error(res.errorMsg);
             }
         }
     });
