@@ -16,7 +16,7 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="头像">
-        <img style="width:50px;height:50px;"
+        <img style="width:50px;height:50px;border-radius: 50%;object-fit: cover;"
              ref="headImage"
              @click="changeHeadImage"
              :src="form.headImage ? form.headImage : defaultImage"
@@ -64,8 +64,8 @@
 /* eslint-disable no-unused-vars */
 const defaultImage = require("../../../assets/personHead.png");
 import { auth, admin } from "../../../config/auth.js";
-import { storage } from "../../../utils/index";
-import * as qiniu from 'qiniu-js'
+import { storage, uploadImage } from "../../../utils/index";
+
 export default {
   name: "userDetail",
   data () {
@@ -132,14 +132,14 @@ export default {
   },
   async created () {
     this.form.type = 2
-    const id = this.$route.query.id;
+    this.userId = this.$route.query.id;
     // 判断是编辑还是新建
-    this.createFlag = id ? false : true
+    this.createFlag = this.userId ? false : true
     if (!this.createFlag) {
-      this.userId = JSON.parse(storage.get("user"))._id;
+      const userId = JSON.parse(storage.get("user"))._id;
       // 判断否是自己
-      this.changeable = this.userId == id ? true : false
-      this.getUserDetail(id)
+      this.changeable = this.userId == userId ? true : false
+      this.getUserDetail(this.userId)
     }
   },
   methods: {
@@ -150,30 +150,22 @@ export default {
         this.uploadToken = result.result.uploadToken
         this.domain = result.result.Domain
       }
-      console.log(this.uploadToken)
       this.$refs.imageInputFile.click()
     },
-    chooseImage (e) {
+    async chooseImage (e) {
+      this.$loading.open({ fullscreen: true })
       const file = e.target.files[0]
       const key = file.name
-      var config = {
-        useCdnDomain: true,
-        disableStatisticsReport: false,
-        retryCount: 6,
-        region: qiniu.region.z2
-      };
-      var putExtra = {
-        customVars: {}
-      };
-      const _this = this
-      const observable = qiniu.upload(file, key, this.uploadToken, putExtra, config);
-      observable.subscribe({
-        next () { },
-        error () { },
-        async complete (res) {
-          _this.form.headImage = `http://${_this.domain}/${key}`
-        }
-      })
+      try {
+        this.$loading.close()
+        this.form.headImage = await uploadImage(file, key, this.uploadToken, this.domain)
+      } catch (error) {
+        this.$loading.close()
+        this.$message({
+          message: '图片上传失败',
+          type: 'warning'
+        });
+      }
     },
     generateKeys (obj, keyArr, expandedKeys) {
       if (typeof obj !== 'object') return
@@ -199,7 +191,15 @@ export default {
       this.form.username = result.result.username
     },
     async save () {
+      this.$loading.open()
       let api = "/api/updateAuth"
+      let _this = this
+      let message = {
+        type: 'success',
+        message: '',
+        errorMessage: '',
+        errorType: 'error'
+      }
       let params = {}
       // 新建和编辑自己信息 需要传递的参数
       if (this.changeable || this.createFlag) {
@@ -214,14 +214,30 @@ export default {
       params.type = this.form.type
       if (this.createFlag) {
         api = "/api/createUser"
+        message.message = "新增成功"
+        message.errorMessage = "新增失败，请稍后重试"
       } else {
         params.userId = this.userId
+        message.message = "修改成功"
+        message.errorMessage = "修改失败，请稍后重试"
       }
       try {
         await this.$refs.form.validate()
         await this.$http.post(api, params);
+        this.$loading.close()
+        this.$message({
+          message: message.message,
+          type: message.type,
+          onClose () {
+            _this.$router.replace({ 'path': '/users' })
+          }
+        });
       } catch (error) {
-        console.log(error)
+        this.$loading.close()
+        this.$message({
+          message: message.errorMessage,
+          type: message.errorType,
+        });
       }
 
     },

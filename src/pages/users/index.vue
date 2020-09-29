@@ -22,7 +22,7 @@
           <template slot-scope="scope">
             <div slot="reference"
                  class="name-wrapper">
-              <img style="width:50px;height:50px;"
+              <img style="width:50px;height:50px;border-radius: 50%;object-fit: cover"
                    :src="scope.row.headImage ? scope.row.headImage : defaultImage"
                    alt="" />
             </div>

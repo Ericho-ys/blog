@@ -30,7 +30,6 @@ let authIds = []
 item.routers.forEach(item => {
     authIds.push(...Object.keys(item))
 })
-console.log(authIds)
 asyncRoute.forEach(item => {
     if (authIds.indexOf(item.id) !== -1) {
         staticSlides.push(item)
